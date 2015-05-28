@@ -38,4 +38,4 @@ Add a new widget to an existing sidebar.
 
 ## 3. Is that it?
 
-Nope! Next [configure targeting](targeting/) and advanced users may look at the [developer api](developer-api/).
+Nope! Next [configure targeting](Targeting/) and advanced users may look at the [developer api](Developer-API/).
