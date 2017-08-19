@@ -153,7 +153,7 @@ class DCWP_DoubleClick {
 
 		$data = array(
 			'network_code' => $this->network_code,
-			'mappings' => $mappings,
+			'mappings' => apply_filters( 'dfw_mappings', $mappings ),
 			'targeting' => $this->targeting(),
 		);
 
@@ -192,14 +192,18 @@ class DCWP_DoubleClick {
 				if ( $ad->has_mapping() ) {
 					$mappings[ "mapping{$ad->id}" ] = $ad->mapping();
 				}
-			} ?>
+			}
+			$mappings = apply_filters( 'dfw_mappings', $mappings );
+			?>
 			<script type="text/javascript">
-				jQuery('.dfw-unit:not(.dfw-lazy-load)').dfp({
-					dfpID: <?php echo wp_json_encode( $this->network_code() ); ?>,
-					collapseEmptyDivs: false,
-					setTargeting: <?php echo wp_json_encode( $this->targeting() ); ?>,
-					sizeMapping: <?php echo wp_json_encode( $mappings ); ?>
-				});
+				var dfw_load = function() {
+					jQuery('.dfw-unit:not(.dfw-lazy-load)').dfp({
+						dfpID: <?php echo wp_json_encode( $this->network_code() ); ?>,
+						collapseEmptyDivs: false,
+						setTargeting: <?php echo wp_json_encode( $this->targeting() ); ?>,
+						sizeMapping: <?php echo wp_json_encode( $mappings ); ?>
+					});
+				};
 			</script>
 		<?php }
 	}
