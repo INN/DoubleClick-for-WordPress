@@ -228,8 +228,11 @@ class DoubleClick {
 		}
 
 		// Templates
-		if ( is_single() ) {
+		// change from is-single() to is_singular() to target pages; only define 'inurl' parameter on non-category, and non-home pages
+		if( is_singular() && (!is_post_type_archive() && !is_home() && !is_front_page())) {
 			$targeting['Page'][] = 'single';
+			global $post;
+			$targeting['inURL'][] = $post->post_name;
 		}
 
 		if ( is_post_type_archive() ) {
@@ -248,7 +251,8 @@ class DoubleClick {
 			$targeting['Page'][] = 'search';
 		}
 
-		if ( is_single() ) {
+		// change from is-single() to !(is-home() or is-front-page()
+		if( !is_home() && !is_front_page()) {
 			$cats = get_the_category();
 			$targeting['Category'] = array();
 
