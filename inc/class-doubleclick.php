@@ -243,6 +243,8 @@ class DoubleClick {
 		 */
 		if ( is_singular() && ( ! is_post_type_archive() && ! is_front_page() ) ) {
 			$targeting['Page'][] = 'single';
+			global $post;
+			$targeting['inURL'][] = $post->post_name;
 		}
 
 		if ( is_post_type_archive() ) {
