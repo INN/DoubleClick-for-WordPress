@@ -33,11 +33,8 @@
 		// if we have some ads, then load 'em!
 		if (toLoad.length > 0) {
 			dfp_options = Object.assign( dfw, {
-				"collapseEmptyDivs": false,
-				"sizeMapping": dfw.mappings,
-				"setTargeting": dfw.targeting
+				"collapseEmptyDivs": false
 			});
-			window.dfp_options = dfp_options;
 			$( toLoad ).dfp( dfp_options ).addClass( 'dfw-loaded' );
 		}
 	};
@@ -50,5 +47,6 @@
 
 		// Run lazyLoad once on DOM ready to load any ads in view
 		lazyLoad();
+		$('.dfw-unit:not(.dfw-lazy-load)').dfp( window.dfw );
 	});
 })();

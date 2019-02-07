@@ -83,8 +83,6 @@ class DoubleClick {
 			$this::$enqueued = true;
 		}
 
-		add_action( 'wp_print_footer_scripts', array( $this, 'footer_script' ) );
-
 		$breakpoints = maybe_unserialize( get_option( 'dfw_breakpoints' ) );
 
 		if ( ! empty( $breakpoints ) ) :
@@ -158,6 +156,9 @@ class DoubleClick {
 
 		$data = array(
 			'dfpID' => $this->network_code(),
+			'sizeMapping' => $mappings,
+			'setTargeting' => $this->targeting(),
+			// The following are legacy support for pre-0.3.1 user code
 			'network_code' => $this->network_code(),
 			'mappings' => $mappings,
 			'targeting' => $this->targeting(),
@@ -170,9 +171,10 @@ class DoubleClick {
 		 * @link https://github.com/INN/doubleclick-for-wp/issues/63#issuecomment-393342611
 		 * @param Array $data An associative array of things. The default is:
 		 *    array(
+		 *        'dfpID' => the option from the plugin settings
 		 *        'network_code' => the option from the plugin settings
-		 *        'mappings' => an array of ad mappings; not sure exactly what this is supposed to be
-		 *        'targeting' => the ad targeting data appropriate to this page
+		 *        'sizeMapping' => an array of ad mappings; not sure exactly what this is supposed to be
+		 *        'setTargeting' => the ad targeting data appropriate to this page
 		 *    )
 		 */
 		$data = apply_filters( 'dfw_js_data', $data );
@@ -197,20 +199,6 @@ class DoubleClick {
 	 */
 	private function network_code() {
 		return ( isset( $this->network_code ) && ! empty( $this->network_code ) ) ? $this->network_code : get_option( 'dfw_network_code','xxxxxx' );
-	}
-
-	public function footer_script() {
-		if ( ! $this->debug ) {
-			$mappings = array();
-			foreach ( $this->ad_slots as $ad ) {
-				if ( $ad->has_mapping() ) {
-					$mappings[ "mapping{$ad->id}" ] = $ad->mapping();
-				}
-			} ?>
-			<script type="text/javascript">
-				jQuery('.dfw-unit:not(.dfw-lazy-load)').dfp( window.dfw );
-			</script>
-		<?php }
 	}
 
 	private function targeting() {
